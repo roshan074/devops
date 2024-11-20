@@ -67,11 +67,7 @@ pipeline {
         failure {
             echo "Pipeline failed."
         }
-        always {
-               node {
-                cleanWs()  // Clean workspace after the build
-            }
-        }
+        
     }
 }
 
