@@ -32,7 +32,7 @@ pipeline {
     agent any // Use the Jenkins agent with Maven installed globally
 
     tools {
-        maven 'mv 3.9.9' // Use the Maven version configured in Jenkins global tool settings
+        maven 'mv' // Use the Maven version configured in Jenkins global tool settings
         jdk 'jdk-11'        // Specify the JDK if configured in Jenkins global tool settings
     }
 
