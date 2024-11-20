@@ -1,5 +1,8 @@
 pipeline {
     agent any 
+    parameters {
+        string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Enter the branch name to build')
+    }
 
     tools {
         maven 'mv' 
@@ -10,6 +13,12 @@ pipeline {
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the branch using the parameter value
+                git branch: "${params.BRANCH_NAME}", url: 'git@github.com:officialarun/Devops-Project.git'
+            }
+        }
         stage('Build') {
             steps {
                 
