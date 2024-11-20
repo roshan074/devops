@@ -37,7 +37,7 @@ pipeline {
         stage('Publish Artifacts') {
             steps {
               
-                archiveArtifacts artifacts: '**/build/libs/*.jar', allowEmptyArchive: false
+                archiveArtifacts artifacts: 'target/my-app-1.0-SNAPSHOT.jar', allowEmptyArchive: false
                 echo "Artifacts published successfully."
             }
         }
