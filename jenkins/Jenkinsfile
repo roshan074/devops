@@ -1,65 +1,57 @@
-// pipeline {
-//     agent {
-//         docker {
-//             image 'maven:3.9.0'
-//             args '-v /root/.m2:/root/.m2'
-//         }
-//     }
-//     stages {
-//         stage('Build') {
-//             steps {
-//                 sh 'mvn -B -DskipTests clean package'
-//             }
-//         }
-//         stage('Test') {
-//             steps {
-//                 sh 'mvn test'
-//             }
-//             post {
-//                 always {
-//                     junit 'target/surefire-reports/*.xml'
-//                 }
-//             }
-//         }
-//         stage('Deliver') {
-//             steps {
-//                 sh './jenkins/scripts/deliver.sh'
-//             }
-//         }
-//     }
-// }
 pipeline {
-    agent any // Use the Jenkins agent with Maven installed globally
+    agent any 
 
     tools {
-        maven 'mv' // Use the Maven version configured in Jenkins global tool settings
-             
+        maven 'mv' 
+    }
+
+    options {
+        timeout(time: 1, unit: 'MINUTES') 
     }
 
     stages {
         stage('Build') {
             steps {
-                // Build the application using Jenkins-provided Maven
+                
                 sh 'mvn -B -DskipTests clean package'
             }
         }
         stage('Test') {
             steps {
-                // Run tests
+           
                 sh 'mvn test'
             }
             post {
                 always {
-                    // Publish test results
+                    
                     junit 'target/surefire-reports/*.xml'
                 }
             }
         }
         stage('Deliver') {
             steps {
-                // Execute delivery script
+                
                 sh './jenkins/scripts/deliver.sh'
             }
+        }
+        stage('Publish Artifacts') {
+            steps {
+              
+                archiveArtifacts artifacts: '**/build/libs/*.jar', allowEmptyArchive: false
+                echo "Artifacts published successfully."
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline executed successfully!"
+        }
+        failure {
+            echo "Pipeline failed."
+        }
+        always {
+            cleanWs() 
         }
     }
 }
