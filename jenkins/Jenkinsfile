@@ -1,9 +1,6 @@
 pipeline {
     agent any 
-    environment {
-        // Assuming the SSH private key is added to Jenkins Credentials as 'github-ssh-key'
-        GIT_SSH_KEY = credentials('JENKINS-GITHUB-KEY')// Credential ID for the private key
-    }
+  
     parameters {
         string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Enter the branch name to build')
     }
@@ -19,12 +16,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the branch using the parameter value
-                
-                sshagent(['JENKINS-GITHUB-KEY']) {
-                    // Checkout the code from the GitHub repository using the SSH URL
-                   git branch: "${params.BRANCH_NAME}", url: 'git@github.com:officialarun/Devops-Project.git'
-                }
+                 git branch: "${params.BRANCH_NAME}", url: 'git@github.com:officialarun/Devops-Project.git'
             }
         }
         stage('Build') {
