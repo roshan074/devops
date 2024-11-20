@@ -33,7 +33,7 @@ pipeline {
 
     tools {
         maven 'mv' // Use the Maven version configured in Jenkins global tool settings
-        jdk 'jdk-11'        // Specify the JDK if configured in Jenkins global tool settings
+             
     }
 
     stages {
