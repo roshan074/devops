@@ -1,10 +1,13 @@
 #!/bin/bash
+
 THRESHOLD=30
-USAGE=$(df / | awk 'NR==2 {print $5}' | sed 's/%//')
+# Use grep to filter the '/' line and awk to extract the usage percentage
+USAGE=$(df -h | grep ' /$' | awk '{print $5}' | awk '{print substr($0, 1, length($0)-1)}') # Removes '%'
+
 if [ "$USAGE" -gt "$THRESHOLD" ]; then
-    echo "Disk usage is at ${USAGE}%, exceeding the threshold of ${THRESHOLD}%."
-    # Send email (requires `mail` to be configured)
-    echo "Disk usage critical: ${USAGE}%" | mail -s "Disk Utilization Alert" whoghostrider@gmail.com
+    echo "Disk usage critical: ${USAGE}% (Threshold: ${THRESHOLD}%)"
+    exit 1 # Non-zero exit code for critical disk usage
 else
-    echo "Disk usage is under control: ${USAGE}%."
+    echo "Disk usage is under control: ${USAGE}% (Threshold: ${THRESHOLD}%)"
+    exit 0 # Zero exit code for normal usage
 fi
